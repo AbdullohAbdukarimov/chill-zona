@@ -1,9 +1,9 @@
-// Multilingual support for JoyBand (Uzbek & Russian)
+// Multilingual support for Chill Zone (Uzbek & Russian)
 
 export const translations = {
   uz: {
     // Brand
-    brandName: 'JoyBand',
+    brandName: 'Chill Zone',
     brandTagline: 'Toshkentda dam olishning yangi darajasi',
     brandSubtitle: 'Activity & Entertainment Booking Marketplace',
 
@@ -11,7 +11,7 @@ export const translations = {
     authTitleLogin: 'Xush kelibsiz!',
     authSubtitleLogin: 'Sevimli maskanlaringizni bron qilish uchun hisobingizga kiring',
     authTitleRegister: 'Ro‘yxatdan o‘tish',
-    authSubtitleRegister: 'JoyBand bilan Toshkentning eng yaxshi hordiq maskanlarini kashf qiling',
+    authSubtitleRegister: 'Chill Zone bilan Toshkentning eng yaxshi hordiq maskanlarini kashf qiling',
     tabLogin: 'Kirish',
     tabRegister: 'Ro‘yxatdan o‘tish',
     phoneLabel: 'Telefon raqam',
@@ -67,7 +67,7 @@ export const translations = {
     btnDetails: 'Batafsil',
 
     // Benefits
-    whyTitle: 'Nega aynan JoyBand?',
+    whyTitle: 'Nega aynan Chill Zone?',
     whySubtitle: 'Hordiq chiqarishning zamonaviy standarti',
     benefit1Title: 'Qo‘ng‘iroqsiz onlayn bron',
     benefit1Desc: 'Operator javobini kutish shart emas. Real vaqt rejimida bo‘sh vaqtlarni ko‘ring va 30 soniyada o‘rningizni band qiling.',
@@ -80,7 +80,7 @@ export const translations = {
     partnerCtaBadge: 'Entertainment Biznes egalari uchun',
     partnerCtaTitle: 'Biznesingiz bormi?',
     partnerCtaHighlight: 'Mijozlaringizni 3 baravarga oshiring!',
-    partnerCtaDesc: 'O‘z kvest zali, bouling klubi, sport arenasi, ot maktabi yoki ko‘ngilochar maskaningizni JoyBand platformasiga qo‘shing. Dastlabki 30 kun 0% komissiya!',
+    partnerCtaDesc: 'O‘z kvest zali, bouling klubi, sport arenasi, ot maktabi yoki ko‘ngilochar maskaningizni Chill Zone platformasiga qo‘shing. Dastlabki 30 kun 0% komissiya!',
     partnerBtnJoin: 'Hamkor bo‘lish (Bepul ro‘yxatdan o‘tish)',
 
     // Catalog
@@ -152,7 +152,7 @@ export const translations = {
 
   ru: {
     // Brand
-    brandName: 'JoyBand',
+    brandName: 'Chill Zone',
     brandTagline: 'Новый уровень отдыха в Ташкенте',
     brandSubtitle: 'Маркетплейс бронирования развлечений и активного отдыха',
 
@@ -160,7 +160,7 @@ export const translations = {
     authTitleLogin: 'Добро пожаловать!',
     authSubtitleLogin: 'Войдите в аккаунт, чтобы бронировать любимые локации',
     authTitleRegister: 'Регистрация',
-    authSubtitleRegister: 'Откройте для себя лучшие места отдыха Ташкента с JoyBand',
+    authSubtitleRegister: 'Откройте для себя лучшие места отдыха Ташкента с Chill Zone',
     tabLogin: 'Вход',
     tabRegister: 'Регистрация',
     phoneLabel: 'Номер телефона',
@@ -216,7 +216,7 @@ export const translations = {
     btnDetails: 'Подробнее',
 
     // Benefits
-    whyTitle: 'Почему именно JoyBand?',
+    whyTitle: 'Почему именно Chill Zone?',
     whySubtitle: 'Современный стандарт отдыха',
     benefit1Title: 'Онлайн бронь без звонков',
     benefit1Desc: 'Не нужно ждать ответа оператора. Просматривайте свободное время в реальном времени и бронируйте за 30 секунд.',
@@ -229,7 +229,7 @@ export const translations = {
     partnerCtaBadge: 'Для владельцев развлекательного бизнеса',
     partnerCtaTitle: 'У вас есть бизнес?',
     partnerCtaHighlight: 'Увеличьте поток клиентов в 3 раза!',
-    partnerCtaDesc: 'Разместите свой квест, боулинг, спорт-арену или конный клуб на платформе JoyBand. Первые 30 дней — 0% комиссии!',
+    partnerCtaDesc: 'Разместите свой квест, боулинг, спорт-арену или конный клуб на платформе Chill Zone. Первые 30 дней — 0% комиссии!',
     partnerBtnJoin: 'Стать партнером (Бесплатная регистрация)',
 
     // Catalog

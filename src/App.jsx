@@ -51,7 +51,7 @@ const AppContent = () => {
     );
   }
 
-  // Once authenticated, access to full JoyBand marketplace
+  // Once authenticated, access to full Chill Zone marketplace
   return (
     <div className="min-h-screen flex flex-col bg-stone-50 dark:bg-slate-950 text-stone-900 dark:text-slate-100 font-sans selection:bg-orange-500 selection:text-white antialiased transition-colors duration-300">
       <Navbar />

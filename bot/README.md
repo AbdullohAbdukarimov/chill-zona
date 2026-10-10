@@ -1,6 +1,6 @@
-# JoyBand Telegram Boti 🤖
+# Chill Zone Telegram Boti 🤖
 
-Ushbu Telegram bot **"JoyBand"** ko‘ngilochar va faol dam olish maskanlarini bron qilish platformasi uchun yaratilgan.
+Ushbu Telegram bot **"Chill Zone"** ko‘ngilochar va faol dam olish maskanlarini bron qilish platformasi uchun yaratilgan.
 
 ## 🎯 Imkoniyatlari:
 1. **Foydalanuvchini ro‘yxatga olish (`/start`)**:
@@ -8,8 +8,8 @@ Ushbu Telegram bot **"JoyBand"** ko‘ngilochar va faol dam olish maskanlarini b
    - Telefon raqam tasdiqlangach, asosiy boshqaruv menyusini ochadi.
 2. **Asosiy Inline Menyu**:
    - **🔍 Joylarni izlash**: Toshkentdagi top-3 mashhur dam olish maskanlarini (kvest, karting, romantik kecha) ko‘rsatadi va to‘g‘ridan-to‘g‘ri bron qilish tugmalarini beradi.
-   - **📅 Mening bandlarim**: Foydalanuvchining so‘nggi bron qilingan chiptasi (#JB-9941), sanasi, vaqti va QR chipta havolasini taqdim etadi.
-   - **🌐 Saytga o‘tish**: Telegram Mini App orqali to‘g‘ridan-to‘g‘ri JoyBand Vercel ilovasini ochadi.
+   - **📅 Mening bandlarim**: Foydalanuvchining so‘nggi bron qilingan chiptasi (#CZ-9941), sanasi, vaqti va QR chipta havolasini taqdim etadi.
+   - **🌐 Saytga o‘tish**: Telegram Mini App orqali to‘g‘ridan-to‘g‘ri Chill Zone Vercel ilovasini ochadi.
    - **ℹ️ Yordam**: 24/7 call-markaz raqami va ma’muriyat kontaktlari.
 3. **Saytdan xabarnoma yuborish funksiyasi (`sendBookingNotification`)**:
    - Veb-sayt backend tizimi muvaffaqiyatli to‘lov/bron bo‘lganda foydalanuvchiga Telegram orqali chipta ma’lumotlarini avtomatik jo‘natadi.
@@ -21,7 +21,7 @@ Ushbu Telegram bot **"JoyBand"** ko‘ngilochar va faol dam olish maskanlarini b
 ### 1-qadam: Bot Token olish
 1. Telegramda [@BotFather](https://t.me/BotFather) botiga kiring.
 2. `/newbot` buyrug‘ini yuboring.
-3. Botingizga nom (masalan: `JoyBand Booking Bot`) va username (masalan: `JoyBand_Booking_Bot`) bering.
+3. Botingizga nom (masalan: `Chill Zone Booking Bot`) va username (masalan: `ChillZone_Booking_Bot`) bering.
 4. BotFather sizga bergan **HTTP API Token** (masalan: `7891234567:AAH...`) dan nusxa oling.
 
 ### 2-qadam: Sozlamalar (.env)

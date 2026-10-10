@@ -1,7 +1,7 @@
 {
-  "name": "joyband-telegram-bot",
+  "name": "chill-zone-telegram-bot",
   "version": "1.0.0",
-  "description": "Telegram Bot and Notification Service for JoyBand Activity Booking platform",
+  "description": "Telegram Bot and Notification Service for Chill Zone Activity Booking platform",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -12,11 +12,11 @@
     "telegram",
     "telegraf",
     "bot",
-    "joyband",
+    "chill-zone",
     "booking",
     "uzbekistan"
   ],
-  "author": "JoyBand Engineering",
+  "author": "Chill Zone Engineering",
   "license": "MIT",
   "dependencies": {
     "dotenv": "^16.4.7",

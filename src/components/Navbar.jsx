@@ -56,7 +56,7 @@ export const Navbar = () => {
           <div>
             <div className="flex items-center gap-2">
               <span className="text-2xl font-black tracking-tight text-stone-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
-                JoyBand
+                Chill Zone
               </span>
               <span className="px-1.5 py-0.5 text-[10px] font-bold tracking-wider uppercase bg-orange-100 dark:bg-orange-950/80 text-orange-700 dark:text-orange-300 rounded-md border border-orange-200 dark:border-orange-800">
                 PRO

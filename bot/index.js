@@ -1,5 +1,5 @@
 /**
- * JoyBand - Activity & Entertainment Booking Marketplace Telegram Bot
+ * Chill Zone - Activity & Entertainment Booking Marketplace Telegram Bot
  * Built using Node.js & Telegraf
  */
 
@@ -82,7 +82,7 @@ bot.start(async (ctx) => {
     const user = registeredUsers.get(chatId);
     return ctx.reply(
       `👋 Qaytganingiz bilan, ${firstName}!\n\n` +
-      `Siz JoyBand tizimidan muvaffaqiyatli ro‘yxatdan o‘tgansiz.\n` +
+      `Siz Chill Zone tizimidan muvaffaqiyatli ro‘yxatdan o‘tgansiz.\n` +
       `📱 Raqamingiz: ${user.phone}\n\n` +
       `Quyidagi menyu orqali kerakli bo‘limni tanlang:`,
       getMainInlineKeyboard()
@@ -92,7 +92,7 @@ bot.start(async (ctx) => {
   // Ro'yxatdan o'tish uchun telefon raqamini so'rash
   await ctx.reply(
     `👋 Assalomu alaykum, ${firstName}!\n\n` +
-    `🔥 <b>JoyBand botiga xush kelibsiz!</b>\n` +
+    `🔥 <b>Chill Zone botiga xush kelibsiz!</b>\n` +
     `Toshkentdagi eng sara kvestlar, bouling, sport va romantik dam olish maskanlarini bir necha soniyada bron qiling.\n\n` +
     `<i>Iltimos, ro‘yxatdan o‘tish uchun telefon raqamingizni yuboring:</i>`,
     {
@@ -131,7 +131,7 @@ bot.on('contact', async (ctx) => {
     `✅ <b>Rahmat, ${firstName}!</b>\n` +
     `Sizning raqamingiz muvaffaqiyatli ro‘yxatga olindi:\n` +
     `📞 <b>${phone}</b>\n\n` +
-    `Endi siz JoyBand platformasidagi barcha xizmatlardan foydalanishingiz va yangi buyurtmalaringiz haqida xabarnomalarni qabul qilishingiz mumkin.`,
+    `Endi siz Chill Zone platformasidagi barcha xizmatlardan foydalanishingiz va yangi buyurtmalaringiz haqida xabarnomalarni qabul qilishingiz mumkin.`,
     {
       parse_mode: 'HTML',
       ...Markup.removeKeyboard()
@@ -212,10 +212,10 @@ bot.action('menu_bookings', async (ctx) => {
 bot.action('menu_help', async (ctx) => {
   await ctx.answerCbQuery();
   await ctx.reply(
-    `📞 <b>JoyBand Qo‘llab-quvvatlash Markazi:</b>\n\n` +
+    `📞 <b>Chill Zone Qo‘llab-quvvatlash Markazi:</b>\n\n` +
     `Savollaringiz yoki bron qilishda qiyinchilik bo‘lsa, biz sizga 24/7 yordam berishga tayyormiz:\n\n` +
     `☎️ Telefon: <b>+998 (71) 200-44-22</b>\n` +
-    `💬 Telegram Admin: @joyband_support\n` +
+    `💬 Telegram Admin: @chillzone_support\n` +
     `📍 Manzil: Toshkent sh., Mirobod t., Oybek ko‘chasi 42-uy`,
     {
       parse_mode: 'HTML',
@@ -239,7 +239,7 @@ bot.action('menu_main', async (ctx) => {
 // /menu komandasi
 bot.command('menu', async (ctx) => {
   await ctx.reply(
-    `JoyBand Asosiy Menyusi:`,
+    `Chill Zone Asosiy Menyusi:`,
     getMainInlineKeyboard()
   );
 });
@@ -294,7 +294,7 @@ export async function sendBookingNotification(chatId, bookingDetails) {
 
   const notificationMessage = 
     `🎉 <b>TABRIKLAYMIZ! BRONINGIZ TASDIQLANDI!</b>\n\n` +
-    `Sizning JoyBand platformasidagi buyurtmangiz muvaffaqiyatli qabul qilindi va joy band qilindi:\n\n` +
+    `Sizning Chill Zone platformasidagi buyurtmangiz muvaffaqiyatli qabul qilindi va joy band qilindi:\n\n` +
     `━━━━━━━━━━━━━━━━━━━━\n` +
     `🎫 <b>Chipta ID:</b> <code>#${id}</code>\n` +
     `📍 <b>Maskan:</b> <b>${title}</b>\n` +
@@ -341,10 +341,10 @@ bot.catch((err, ctx) => {
 // Agar to'g'ridan-to'g'ri `node index.js` orqali ishga tushirilsa
 if (process.argv[1] && process.argv[1].endsWith('index.js')) {
   if (BOT_TOKEN && BOT_TOKEN !== '1234567890:ABCdefGHIjklMNOpqrSTUvwxYZ_sample_token') {
-    console.log('🚀 JoyBand Telegram Boti ishga tushmoqda...');
+    console.log('🚀 Chill Zone Telegram Boti ishga tushmoqda...');
     bot.launch()
       .then(() => {
-        console.log('✨ JoyBand Telegram Boti muvaffaqiyatli ishlayapti!');
+        console.log('✨ Chill Zone Telegram Boti muvaffaqiyatli ishlayapti!');
         console.log(`🌐 Mini App URL: ${WEBAPP_URL}`);
       })
       .catch((err) => {

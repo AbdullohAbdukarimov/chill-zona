@@ -15,12 +15,13 @@ export const AppProvider = ({ children }) => {
 
   // Clear legacy localStorage auth so registration screen is strictly shown first
   useEffect(() => {
+    localStorage.removeItem('chillzone_auth');
     localStorage.removeItem('joyband_auth');
   }, []);
 
   // 2. THEME STATE (Dark Mode Toggle)
   const [theme, setTheme] = useState(() => {
-    const saved = localStorage.getItem('joyband_theme');
+    const saved = localStorage.getItem('chillzone_theme') || localStorage.getItem('joyband_theme');
     if (saved) return saved;
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   });
@@ -32,7 +33,7 @@ export const AppProvider = ({ children }) => {
     } else {
       root.classList.remove('dark');
     }
-    localStorage.setItem('joyband_theme', theme);
+    localStorage.setItem('chillzone_theme', theme);
   }, [theme]);
 
   const toggleTheme = () => {
@@ -41,12 +42,12 @@ export const AppProvider = ({ children }) => {
 
   // 3. LANGUAGE STATE (UZB / RUS)
   const [language, setLanguage] = useState(() => {
-    return localStorage.getItem('joyband_lang') || 'uz';
+    return localStorage.getItem('chillzone_lang') || localStorage.getItem('joyband_lang') || 'uz';
   });
 
   const changeLanguage = (lang) => {
     setLanguage(lang);
-    localStorage.setItem('joyband_lang', lang);
+    localStorage.setItem('chillzone_lang', lang);
   };
 
   // Translation helper function
@@ -90,7 +91,7 @@ export const AppProvider = ({ children }) => {
 
   // User profile (defaults to Abdulloh Abdukarimov and persists in localStorage)
   const [userProfile, setUserProfile] = useState(() => {
-    const saved = localStorage.getItem('joyband_user_profile');
+    const saved = localStorage.getItem('chillzone_user_profile') || localStorage.getItem('joyband_user_profile');
     if (saved) {
       try {
         return JSON.parse(saved);
@@ -102,7 +103,7 @@ export const AppProvider = ({ children }) => {
       name: 'Abdulloh',
       surname: 'Abdukarimov',
       phone: '+998 (90) 123-45-67',
-      email: 'abdulloh.abdukarimov@joyband.uz',
+      email: 'abdulloh.abdukarimov@chillzone.uz',
       city: 'Toshkent'
     };
   });
@@ -110,7 +111,7 @@ export const AppProvider = ({ children }) => {
   // Keep localStorage in sync with userProfile updates
   useEffect(() => {
     try {
-      localStorage.setItem('joyband_user_profile', JSON.stringify(userProfile));
+      localStorage.setItem('chillzone_user_profile', JSON.stringify(userProfile));
     } catch (e) {}
   }, [userProfile]);
 
@@ -124,24 +125,25 @@ export const AppProvider = ({ children }) => {
         surname: userData.surname !== undefined ? userData.surname : prev.surname || 'Abdukarimov',
         phone: userData.phone || prev.phone,
         city: userData.city || prev.city,
-        email: userData.name ? `${userData.name.toLowerCase().replace(/\s+/g, '.')}@joyband.uz` : prev.email
+        email: userData.name ? `${userData.name.toLowerCase().replace(/\s+/g, '.')}@chillzone.uz` : prev.email
       };
       try {
-        localStorage.setItem('joyband_user_profile', JSON.stringify(updated));
+        localStorage.setItem('chillzone_user_profile', JSON.stringify(updated));
       } catch (e) {}
       return updated;
     });
     navigate('home');
     addToast(
       language === 'uz'
-        ? `Xush kelibsiz! JoyBand platformasiga muvaffaqiyatli kirdingiz.`
-        : `Добро пожаловать! Вы успешно вошли на платформу JoyBand.`,
+        ? `Xush kelibsiz! Chill Zone platformasiga muvaffaqiyatli kirdingiz.`
+        : `Добро пожаловать! Вы успешно вошли на платформу Chill Zone.`,
       'success'
     );
   };
 
   const logout = () => {
     setIsAuthenticated(false);
+    localStorage.removeItem('chillzone_auth');
     localStorage.removeItem('joyband_auth');
     addToast(
       language === 'uz' ? 'Tizimdan muvaffaqiyatli chiqdingiz' : 'Вы успешно вышли из системы',

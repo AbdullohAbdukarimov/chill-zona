@@ -69,7 +69,7 @@ export const NewListingModal = () => {
               required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Masalan: JoyBand VR Escape Arena"
+              placeholder="Masalan: Chill Zone VR Escape Arena"
               className="w-full px-3.5 py-2.5 text-sm bg-white dark:bg-slate-800 border border-stone-200 dark:border-slate-700 rounded-xl text-stone-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:outline-none"
             />
           </div>

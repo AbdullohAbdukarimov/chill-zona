@@ -53,7 +53,7 @@ export const PartnerDashboardPage = () => {
               <div>
                 <div className="flex items-center gap-2">
                   <h1 className="text-2xl font-black tracking-tight">
-                    JoyBand Host Portal
+                    Chill Zone Host Portal
                   </h1>
                   <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold rounded-md">
                     Verifikatsiyadan o‘tgan

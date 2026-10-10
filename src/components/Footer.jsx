@@ -26,7 +26,7 @@ export const Footer = () => {
                 <Flame className="w-5 h-5 text-white" />
               </div>
               <span className="text-2xl font-black tracking-tight text-white group-hover:text-orange-400 transition-colors">
-                JoyBand
+                Chill Zone
               </span>
             </div>
             
@@ -41,7 +41,7 @@ export const Footer = () => {
               </div>
               <div className="flex items-center gap-2.5">
                 <Send className="w-4 h-4 text-orange-500 shrink-0" />
-                <span>Telegram: @joyband_support_bot</span>
+                <span>Telegram: @chillzone_support_bot</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <MapPin className="w-4 h-4 text-orange-500 shrink-0" />
@@ -122,7 +122,7 @@ export const Footer = () => {
         {/* Bottom Bar: Payments & Copyright */}
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-stone-400 dark:text-slate-500">
           <div className="flex items-center gap-2">
-            <span>© 2026 JoyBand. {t('allRightsReserved')}</span>
+            <span>© 2026 Chill Zone. {t('allRightsReserved')}</span>
             <span className="text-stone-600 dark:text-slate-700">|</span>
             <span className="flex items-center gap-1 text-stone-300 dark:text-slate-400">
               Made with <Heart className="w-3 h-3 text-orange-500 fill-orange-500 inline" /> in Tashkent

@@ -40,7 +40,7 @@ export const TicketModal = () => {
             <div className="w-8 h-8 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center">
               <Flame className="w-5 h-5 text-white" />
             </div>
-            <span className="font-black text-lg tracking-tight">JoyBand Pass</span>
+            <span className="font-black text-lg tracking-tight">Chill Zone Pass</span>
             <span className="ml-auto mr-6 px-2 py-0.5 bg-white/30 text-[10px] font-bold rounded-full">
               ELEKTRON CHIPTA
             </span>

@@ -51,7 +51,7 @@ export const AuthPage = () => {
         first = nameParts[0] || 'Abdulloh';
         last = nameParts.slice(1).join(' ') || '';
       } else {
-        const saved = localStorage.getItem('joyband_user_profile');
+        const saved = localStorage.getItem('chillzone_user_profile') || localStorage.getItem('joyband_user_profile');
         if (saved) {
           try {
             const parsed = JSON.parse(saved);
@@ -88,7 +88,7 @@ export const AuthPage = () => {
           <div>
             <div className="flex items-center gap-2">
               <span className="text-2xl font-black tracking-tight text-stone-900 dark:text-white">
-                JoyBand
+                Chill Zone
               </span>
               <span className="px-1.5 py-0.5 text-[10px] font-bold tracking-wider uppercase bg-orange-100 dark:bg-orange-900/60 text-orange-700 dark:text-orange-300 rounded-md border border-orange-200 dark:border-orange-800">
                 PRO
@@ -362,7 +362,7 @@ export const AuthPage = () => {
       {/* Footer Bottom Bar */}
       <footer className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-400 dark:text-slate-500 gap-2">
         <div className="flex items-center gap-2">
-          <span>© 2026 JoyBand. {t('allRightsReserved')}</span>
+          <span>© 2026 Chill Zone. {t('allRightsReserved')}</span>
         </div>
         <div className="flex items-center gap-4">
           <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-medium">

@@ -392,7 +392,7 @@ export const HomePage = () => {
         </div>
       </section>
 
-      {/* WHY JOYBAND (BENEFITS) */}
+      {/* WHY CHILL ZONE (BENEFITS) */}
       <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-12">
           <span className="text-xs font-bold uppercase tracking-wider text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-950/60 px-3 py-1 rounded-full border border-orange-200 dark:border-orange-800">
@@ -479,10 +479,10 @@ export const HomePage = () => {
               <div className="flex items-center justify-between border-b border-white/10 dark:border-slate-700 pb-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-orange-500 flex items-center justify-center font-bold">
-                    JB
+                    CZ
                   </div>
                   <div>
-                    <h4 className="font-bold text-sm">JoyBand Partner Portal</h4>
+                    <h4 className="font-bold text-sm">Chill Zone Partner Portal</h4>
                     <span className="text-xs text-stone-400 dark:text-slate-400">Jonli demo statistikasi</span>
                   </div>
                 </div>
@@ -503,7 +503,7 @@ export const HomePage = () => {
               </div>
 
               <p className="text-xs text-stone-300 dark:text-slate-300 italic pt-2">
-                "JoyBand orqali kvest zalimizga kunlik buyurtmalar 3 barobarga oshdi. Barcha jarayon to‘liq avtomatlashgan."
+                "Chill Zone orqali kvest zalimizga kunlik buyurtmalar 3 barobarga oshdi. Barcha jarayon to‘liq avtomatlashgan."
               </p>
             </div>
 
