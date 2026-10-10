@@ -20,7 +20,7 @@ import {
 export const AuthPage = () => {
   const { login, theme, toggleTheme, language, changeLanguage, t } = useApp();
 
-  const [mode, setMode] = useState('login'); // 'login' | 'register'
+  const [mode, setMode] = useState('register'); // Default to Ro'yxatdan o'tish (Registration) first
   const [phoneNumber, setPhoneNumber] = useState('+998 ');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
@@ -151,29 +151,29 @@ export const AuthPage = () => {
             </p>
           </div>
 
-          {/* Toggle between "Kirish" and "Ro'yxatdan o'tish" */}
+          {/* Toggle between "Ro'yxatdan o'tish" and "Kirish" */}
           <div className="grid grid-cols-2 p-1.5 bg-stone-100 dark:bg-slate-800/80 rounded-2xl mb-6 border border-stone-200/60 dark:border-slate-700/60">
             <button
               type="button"
-              onClick={() => setMode('login')}
-              className={`py-2.5 text-xs sm:text-sm font-bold rounded-xl transition-all duration-200 ${
-                mode === 'login'
-                  ? 'bg-white dark:bg-slate-900 text-orange-600 dark:text-orange-400 shadow-md'
-                  : 'text-stone-600 dark:text-slate-400 hover:text-stone-900 dark:hover:text-white'
-              }`}
-            >
-              {t('tabLogin')}
-            </button>
-            <button
-              type="button"
               onClick={() => setMode('register')}
-              className={`py-2.5 text-xs sm:text-sm font-bold rounded-xl transition-all duration-200 ${
+              className={`py-2.5 text-xs sm:text-sm font-bold rounded-xl transition-all duration-200 cursor-pointer ${
                 mode === 'register'
                   ? 'bg-white dark:bg-slate-900 text-orange-600 dark:text-orange-400 shadow-md'
                   : 'text-stone-600 dark:text-slate-400 hover:text-stone-900 dark:hover:text-white'
               }`}
             >
               {t('tabRegister')}
+            </button>
+            <button
+              type="button"
+              onClick={() => setMode('login')}
+              className={`py-2.5 text-xs sm:text-sm font-bold rounded-xl transition-all duration-200 cursor-pointer ${
+                mode === 'login'
+                  ? 'bg-white dark:bg-slate-900 text-orange-600 dark:text-orange-400 shadow-md'
+                  : 'text-stone-600 dark:text-slate-400 hover:text-stone-900 dark:hover:text-white'
+              }`}
+            >
+              {t('tabLogin')}
             </button>
           </div>
 

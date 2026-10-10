@@ -10,10 +10,13 @@ import { translations } from '../data/translations';
 const AppContext = createContext(null);
 
 export const AppProvider = ({ children }) => {
-  // 1. AUTHENTICATION STATE (Gatekeeping: starts false)
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return localStorage.getItem('joyband_auth') === 'true';
-  });
+  // 1. AUTHENTICATION STATE (Strict Gatekeeping: starts false so Registration is always shown first)
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // Clear legacy localStorage auth so registration screen is strictly shown first
+  useEffect(() => {
+    localStorage.removeItem('joyband_auth');
+  }, []);
 
   // 2. THEME STATE (Dark Mode Toggle)
   const [theme, setTheme] = useState(() => {
@@ -97,7 +100,6 @@ export const AppProvider = ({ children }) => {
   // Login simulation
   const login = (userData = {}) => {
     setIsAuthenticated(true);
-    localStorage.setItem('joyband_auth', 'true');
     if (userData.phone) {
       setUserProfile(prev => ({
         ...prev,
