@@ -115,15 +115,55 @@ export const AppProvider = ({ children }) => {
     } catch (e) {}
   }, [userProfile]);
 
+  // ==========================================
+  // USER-SPECIFIC FAVORITES STORAGE HELPERS
+  // ==========================================
+  const getUserFavoritesKey = (phone) => {
+    if (!phone) return 'favorites_guest';
+    const cleanPhone = String(phone).replace(/[^0-9+]/g, '');
+    return `favorites_${cleanPhone}`;
+  };
+
+  const loadUserFavoritesFromStorage = (phone) => {
+    if (!phone) return [];
+    const primaryKey = getUserFavoritesKey(phone);
+    const directKey = `favorites_${phone}`;
+    const saved = localStorage.getItem(primaryKey) || localStorage.getItem(directKey);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) return parsed;
+      } catch (e) {
+        console.error('Error loading user favorites from storage:', e);
+      }
+    }
+    return [];
+  };
+
+  const saveUserFavoritesToStorage = (phone, favList) => {
+    if (!phone) return;
+    const primaryKey = getUserFavoritesKey(phone);
+    const directKey = `favorites_${phone}`;
+    try {
+      const data = JSON.stringify(favList);
+      localStorage.setItem(primaryKey, data);
+      localStorage.setItem(directKey, data);
+    } catch (e) {
+      console.error('Error saving user favorites to storage:', e);
+    }
+  };
+
   // Login simulation
   const login = (userData = {}) => {
     setIsAuthenticated(true);
+    const targetPhone = userData.phone || userProfile.phone || '+998 (90) 123-45-67';
+
     setUserProfile(prev => {
       const updated = {
         ...prev,
         name: userData.name || prev.name || 'Abdulloh',
         surname: userData.surname !== undefined ? userData.surname : prev.surname || 'Abdukarimov',
-        phone: userData.phone || prev.phone,
+        phone: targetPhone,
         city: userData.city || prev.city,
         email: userData.name ? `${userData.name.toLowerCase().replace(/\s+/g, '.')}@chillzone.uz` : prev.email
       };
@@ -132,6 +172,12 @@ export const AppProvider = ({ children }) => {
       } catch (e) {}
       return updated;
     });
+
+    // 3. DATA LOADING ON LOGIN:
+    // Immediately fetch THEIR specific favorites from localStorage using their unique key
+    const userFavorites = loadUserFavoritesFromStorage(targetPhone);
+    setFavorites(userFavorites);
+
     navigate('home');
     addToast(
       language === 'uz'
@@ -145,21 +191,48 @@ export const AppProvider = ({ children }) => {
     setIsAuthenticated(false);
     localStorage.removeItem('chillzone_auth');
     localStorage.removeItem('joyband_auth');
+
+    // 2. STATE CLEARING ON LOGOUT:
+    // Explicitly clear the active favorites state in React so no ghost data remains
+    setFavorites([]);
+
     addToast(
       language === 'uz' ? 'Tizimdan muvaffaqiyatli chiqdingiz' : 'Вы успешно вышли из системы',
       'info'
     );
   };
 
-  // Favorites
-  const [favorites, setFavorites] = useState(['act-1', 'act-3']);
+  // 1 & 4. USER-SPECIFIC FAVORITES STATE
+  const [favorites, setFavorites] = useState(() => {
+    const savedProfile = localStorage.getItem('chillzone_user_profile') || localStorage.getItem('joyband_user_profile');
+    if (savedProfile) {
+      try {
+        const parsed = JSON.parse(savedProfile);
+        if (parsed?.phone) {
+          return loadUserFavoritesFromStorage(parsed.phone);
+        }
+      } catch (e) {}
+    }
+    return [];
+  });
 
   const toggleFavorite = (activityId) => {
+    const activePhone = userProfile?.phone;
+
     setFavorites((prev) => {
       const exists = prev.includes(activityId);
       const activity = MOCK_ACTIVITIES.find(a => a.id === activityId);
       const title = activity ? activity.title : 'Maskan';
       
+      const updated = exists 
+        ? prev.filter(id => id !== activityId)
+        : [...prev, activityId];
+
+      // Read & write to active user's specific localStorage array
+      if (activePhone) {
+        saveUserFavoritesToStorage(activePhone, updated);
+      }
+
       if (exists) {
         addToast(
           language === 'uz'
@@ -167,7 +240,6 @@ export const AppProvider = ({ children }) => {
             : `"${title}" удалено из избранного`,
           'info'
         );
-        return prev.filter(id => id !== activityId);
       } else {
         addToast(
           language === 'uz'
@@ -175,8 +247,9 @@ export const AppProvider = ({ children }) => {
             : `"${title}" добавлено в избранное!`,
           'success'
         );
-        return [...prev, activityId];
       }
+
+      return updated;
     });
   };
 
@@ -329,6 +402,7 @@ export const AppProvider = ({ children }) => {
       selectedActivityId,
       navigate,
       userProfile,
+      currentUser: userProfile,
       setUserProfile,
       favorites,
       toggleFavorite,
