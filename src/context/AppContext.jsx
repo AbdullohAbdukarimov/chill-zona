@@ -5,10 +5,52 @@ import {
   INITIAL_PARTNER_LISTINGS, 
   INITIAL_PARTNER_ORDERS 
 } from '../data/mockData';
+import { translations } from '../data/translations';
 
 const AppContext = createContext(null);
 
 export const AppProvider = ({ children }) => {
+  // 1. AUTHENTICATION STATE (Gatekeeping: starts false)
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return localStorage.getItem('joyband_auth') === 'true';
+  });
+
+  // 2. THEME STATE (Dark Mode Toggle)
+  const [theme, setTheme] = useState(() => {
+    const saved = localStorage.getItem('joyband_theme');
+    if (saved) return saved;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+    localStorage.setItem('joyband_theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
+  };
+
+  // 3. LANGUAGE STATE (UZB / RUS)
+  const [language, setLanguage] = useState(() => {
+    return localStorage.getItem('joyband_lang') || 'uz';
+  });
+
+  const changeLanguage = (lang) => {
+    setLanguage(lang);
+    localStorage.setItem('joyband_lang', lang);
+  };
+
+  // Translation helper function
+  const t = (key) => {
+    return translations[language]?.[key] || translations.uz[key] || key;
+  };
+
   // Navigation State
   const [currentPage, setCurrentPage] = useState('home');
   const [selectedActivityId, setSelectedActivityId] = useState('act-1');
@@ -43,14 +85,44 @@ export const AppProvider = ({ children }) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // User state
+  // User profile
   const [userProfile, setUserProfile] = useState({
     name: 'Azizbek',
     surname: 'Rahimov',
-    phone: '+998 90 123 45 67',
-    email: 'azizbek.rahimov@chillzone.uz',
+    phone: '+998 (90) 123-45-67',
+    email: 'azizbek.rahimov@joyband.uz',
     city: 'Toshkent'
   });
+
+  // Login simulation
+  const login = (userData = {}) => {
+    setIsAuthenticated(true);
+    localStorage.setItem('joyband_auth', 'true');
+    if (userData.phone) {
+      setUserProfile(prev => ({
+        ...prev,
+        phone: userData.phone,
+        name: userData.name || prev.name,
+        surname: userData.surname || prev.surname
+      }));
+    }
+    navigate('home');
+    addToast(
+      language === 'uz'
+        ? `Xush kelibsiz! JoyBand platformasiga muvaffaqiyatli kirdingiz.`
+        : `Добро пожаловать! Вы успешно вошли на платформу JoyBand.`,
+      'success'
+    );
+  };
+
+  const logout = () => {
+    setIsAuthenticated(false);
+    localStorage.removeItem('joyband_auth');
+    addToast(
+      language === 'uz' ? 'Tizimdan muvaffaqiyatli chiqdingiz' : 'Вы успешно вышли из системы',
+      'info'
+    );
+  };
 
   // Favorites
   const [favorites, setFavorites] = useState(['act-1', 'act-3']);
@@ -62,10 +134,20 @@ export const AppProvider = ({ children }) => {
       const title = activity ? activity.title : 'Maskan';
       
       if (exists) {
-        addToast(`"${title}" sevimlilardan olib tashlandi`, 'info');
+        addToast(
+          language === 'uz'
+            ? `"${title}" sevimlilardan olib tashlandi`
+            : `"${title}" удалено из избранного`,
+          'info'
+        );
         return prev.filter(id => id !== activityId);
       } else {
-        addToast(`"${title}" sevimlilarga qo‘shildi!`, 'success');
+        addToast(
+          language === 'uz'
+            ? `"${title}" sevimlilarga qo‘shildi!`
+            : `"${title}" добавлено в избранное!`,
+          'success'
+        );
         return [...prev, activityId];
       }
     });
@@ -76,14 +158,24 @@ export const AppProvider = ({ children }) => {
 
   const addBooking = (newBooking) => {
     setUserBookings(prev => [newBooking, ...prev]);
-    addToast('Bron muvaffaqiyatli amalga oshirildi! Chiptangiz profilingizda saqlandi.', 'success');
+    addToast(
+      language === 'uz'
+        ? 'Bron muvaffaqiyatli amalga oshirildi! Chiptangiz profilingizda saqlandi.'
+        : 'Бронирование успешно завершено! Ваш билет сохранен в профиле.',
+      'success'
+    );
   };
 
   const cancelBooking = (bookingId) => {
     setUserBookings(prev => 
-      prev.map(b => b.id === bookingId ? { ...b, status: 'Cancelled', statusText: 'Bekor qilingan' } : b)
+      prev.map(b => b.id === bookingId ? { ...b, status: 'Cancelled', statusText: language === 'uz' ? 'Bekor qilingan' : 'Отменено' } : b)
     );
-    addToast(`Band qilish (#${bookingId}) bekor qilindi`, 'warning');
+    addToast(
+      language === 'uz'
+        ? `Band qilish (#${bookingId}) bekor qilindi`
+        : `Бронь (#${bookingId}) отменена`,
+      'warning'
+    );
   };
 
   // Partner dashboard state
@@ -92,28 +184,42 @@ export const AppProvider = ({ children }) => {
 
   const addPartnerListing = (listing) => {
     setPartnerListings(prev => [listing, ...prev]);
-    addToast('Yangi xizmat muvaffaqiyatli qo‘shildi!', 'success');
+    addToast(
+      language === 'uz' ? 'Yangi xizmat muvaffaqiyatli qo‘shildi!' : 'Новая услуга успешно добавлена!',
+      'success'
+    );
   };
 
   const toggleListingStatus = (id) => {
     setPartnerListings(prev => 
       prev.map(l => l.id === id ? { ...l, active: !l.active } : l)
     );
-    addToast('Xizmat faollik holati o‘zgartirildi', 'info');
+    addToast(
+      language === 'uz' ? 'Xizmat faollik holati o‘zgartirildi' : 'Статус активности услуги изменен',
+      'info'
+    );
   };
 
   const approveOrder = (orderId) => {
     setPartnerOrders(prev => 
       prev.map(o => o.id === orderId ? { ...o, status: 'Approved' } : o)
     );
-    addToast(`Buyurtma #${orderId} tasdiqlandi va mijozga SMS jo‘natildi!`, 'success');
+    addToast(
+      language === 'uz'
+        ? `Buyurtma #${orderId} tasdiqlandi va mijozga SMS jo‘natildi!`
+        : `Заказ #${orderId} подтвержден, клиенту отправлено SMS!`,
+      'success'
+    );
   };
 
   const declineOrder = (orderId) => {
     setPartnerOrders(prev => 
       prev.map(o => o.id === orderId ? { ...o, status: 'Declined' } : o)
     );
-    addToast(`Buyurtma #${orderId} rad etildi`, 'warning');
+    addToast(
+      language === 'uz' ? `Buyurtma #${orderId} rad etildi` : `Заказ #${orderId} отклонен`,
+      'warning'
+    );
   };
 
   // Global search filters
@@ -139,7 +245,10 @@ export const AppProvider = ({ children }) => {
       searchQuery: '',
       selectedDate: ''
     });
-    addToast('Barcha filtrlar tozalandi', 'info');
+    addToast(
+      language === 'uz' ? 'Barcha filtrlar tozalandi' : 'Все фильтры сброшены',
+      'info'
+    );
   };
 
   // Modals state
@@ -181,6 +290,14 @@ export const AppProvider = ({ children }) => {
 
   return (
     <AppContext.Provider value={{
+      isAuthenticated,
+      login,
+      logout,
+      theme,
+      toggleTheme,
+      language,
+      changeLanguage,
+      t,
       currentPage,
       selectedActivityId,
       navigate,

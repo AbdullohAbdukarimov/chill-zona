@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -9,8 +11,6 @@
   body {
     margin: 0;
     padding: 0;
-    background-color: #fafaf9;
-    color: #1c1917;
     min-height: 100vh;
   }
 
@@ -22,11 +22,20 @@
   ::-webkit-scrollbar-track {
     background: #f1f1f1;
   }
+  .dark ::-webkit-scrollbar-track {
+    background: #0f172a;
+  }
   ::-webkit-scrollbar-thumb {
     background: #fed7aa;
     border-radius: 4px;
   }
   ::-webkit-scrollbar-thumb:hover {
+    background: #f97316;
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    background: #475569;
+  }
+  .dark ::-webkit-scrollbar-thumb:hover {
     background: #f97316;
   }
 }

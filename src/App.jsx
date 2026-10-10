@@ -7,6 +7,7 @@ import { BookingModal } from './components/BookingModal';
 import { TicketModal } from './components/TicketModal';
 import { NewListingModal } from './components/NewListingModal';
 import { ImageGalleryModal } from './components/ImageGalleryModal';
+import { AuthPage } from './components/AuthPage';
 
 import { HomePage } from './pages/HomePage';
 import { ExplorePage } from './pages/ExplorePage';
@@ -31,6 +32,31 @@ const PageRouter = () => {
       <TicketModal />
       <NewListingModal />
       <ImageGalleryModal />
+    </div>
+  );
+};
+
+// Root App Controller with Gatekeeping Authentication
+const AppContent = () => {
+  const { isAuthenticated } = useApp();
+
+  // 1. AUTHENTICATION FIRST (Gatekeeping):
+  // When app loads, unauthenticated users see the full-screen Login/Register portal
+  if (!isAuthenticated) {
+    return (
+      <>
+        <AuthPage />
+        <ToastContainer />
+      </>
+    );
+  }
+
+  // Once authenticated, access to full JoyBand marketplace
+  return (
+    <div className="min-h-screen flex flex-col bg-stone-50 dark:bg-slate-950 text-stone-900 dark:text-slate-100 font-sans selection:bg-orange-500 selection:text-white antialiased transition-colors duration-300">
+      <Navbar />
+      <PageRouter />
+      <Footer />
       <ToastContainer />
     </div>
   );
@@ -39,11 +65,7 @@ const PageRouter = () => {
 export default function App() {
   return (
     <AppProvider>
-      <div className="min-h-screen flex flex-col bg-stone-50 text-stone-900 font-sans selection:bg-orange-500 selection:text-white antialiased">
-        <Navbar />
-        <PageRouter />
-        <Footer />
-      </div>
+      <AppContent />
     </AppProvider>
   );
 }
