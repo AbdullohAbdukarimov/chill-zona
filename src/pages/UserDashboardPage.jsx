@@ -39,24 +39,31 @@ export const UserDashboardPage = () => {
 
   // Settings form local state
   const [settingsForm, setSettingsForm] = useState({
-    name: userProfile.name,
-    surname: userProfile.surname,
-    phone: userProfile.phone,
-    email: userProfile.email,
-    city: userProfile.city,
+    name: userProfile?.name || '',
+    surname: userProfile?.surname || '',
+    phone: userProfile?.phone || '',
+    email: userProfile?.email || '',
+    city: userProfile?.city || 'Toshkent',
     currentPassword: '',
     newPassword: '',
   });
 
   const handleSettingsSubmit = (e) => {
     e.preventDefault();
-    setUserProfile({
+    const updated = {
       name: settingsForm.name,
       surname: settingsForm.surname,
       phone: settingsForm.phone,
       email: settingsForm.email,
       city: settingsForm.city,
-    });
+    };
+    setUserProfile(updated);
+    try {
+      localStorage.setItem('chillzone_current_user', JSON.stringify(updated));
+      localStorage.setItem('chillzone_active_session', JSON.stringify(updated));
+      const cleanPhone = String(settingsForm.phone).replace(/[^0-9+]/g, '');
+      localStorage.setItem('user_' + cleanPhone, JSON.stringify(updated));
+    } catch (err) {}
     addToast('Profil sozlamalari muvaffaqiyatli saqlandi!', 'success');
   };
 
@@ -80,16 +87,16 @@ export const UserDashboardPage = () => {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-orange-500 to-amber-400 text-white flex items-center justify-center font-black text-2xl shadow-lg shadow-orange-500/20">
-                {userProfile.name?.[0] || 'A'}
+                {userProfile?.name?.[0] || 'U'}
               </div>
               <div>
                 <h1 className="text-2xl sm:text-3xl font-black text-stone-900 dark:text-white tracking-tight">
-                  {userProfile.name} {userProfile.surname}
+                  {userProfile?.name || 'Mijoz'} {userProfile?.surname || ''}
                 </h1>
                 <p className="text-xs sm:text-sm text-stone-500 dark:text-slate-400 mt-0.5 flex items-center gap-2">
-                  <span>Mijoz ID: #USR-7821</span>
+                  <span>Mijoz ID: #{userProfile?.phone ? userProfile.phone.slice(-4) : '7821'}</span>
                   <span>•</span>
-                  <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{userProfile.city}, O‘zbekiston</span>
+                  <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{userProfile?.city || 'Toshkent'}, O‘zbekiston</span>
                 </p>
               </div>
             </div>

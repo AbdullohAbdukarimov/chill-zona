@@ -43,20 +43,22 @@ export const AuthPage = () => {
     setIsLoading(true);
 
     setTimeout(() => {
-      let first = 'Abdulloh';
-      let last = 'Abdukarimov';
+      let first = '';
+      let last = '';
 
-      if (fullName.trim()) {
+      if (mode === 'register' && fullName.trim()) {
         const nameParts = fullName.trim().split(/\s+/);
-        first = nameParts[0] || 'Abdulloh';
+        first = nameParts[0] || 'Foydalanuvchi';
         last = nameParts.slice(1).join(' ') || '';
       } else {
-        const saved = localStorage.getItem('chillzone_user_profile') || localStorage.getItem('joyband_user_profile');
-        if (saved) {
+        // Look up registered user account by phone number
+        const cleanPhone = String(phoneNumber).replace(/[^0-9+]/g, '');
+        const savedAccount = localStorage.getItem('user_' + cleanPhone);
+        if (savedAccount) {
           try {
-            const parsed = JSON.parse(saved);
-            if (parsed.name) first = parsed.name;
-            if (parsed.surname !== undefined) last = parsed.surname;
+            const parsed = JSON.parse(savedAccount);
+            first = parsed.name || '';
+            last = parsed.surname || '';
           } catch (err) {}
         }
       }

@@ -89,31 +89,36 @@ export const AppProvider = ({ children }) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // User profile (defaults to Abdulloh Abdukarimov and persists in localStorage)
-  const [userProfile, setUserProfile] = useState(() => {
-    const saved = localStorage.getItem('chillzone_user_profile') || localStorage.getItem('joyband_user_profile');
+  // ==========================================
+  // USER ACCOUNTS & SESSION HELPERS
+  // ==========================================
+  const getUserAccountKey = (phone) => {
+    if (!phone) return 'user_guest';
+    const cleanPhone = String(phone).replace(/[^0-9+]/g, '');
+    return `user_${cleanPhone}`;
+  };
+
+  const saveUserAccount = (user) => {
+    if (!user || !user.phone) return;
+    const key = getUserAccountKey(user.phone);
+    try {
+      localStorage.setItem(key, JSON.stringify(user));
+    } catch (e) {
+      console.error('Error saving user account:', e);
+    }
+  };
+
+  const getUserAccount = (phone) => {
+    if (!phone) return null;
+    const key = getUserAccountKey(phone);
+    const saved = localStorage.getItem(key);
     if (saved) {
       try {
         return JSON.parse(saved);
-      } catch (e) {
-        console.error(e);
-      }
+      } catch (e) {}
     }
-    return {
-      name: 'Abdulloh',
-      surname: 'Abdukarimov',
-      phone: '+998 (90) 123-45-67',
-      email: 'abdulloh.abdukarimov@chillzone.uz',
-      city: 'Toshkent'
-    };
-  });
-
-  // Keep localStorage in sync with userProfile updates
-  useEffect(() => {
-    try {
-      localStorage.setItem('chillzone_user_profile', JSON.stringify(userProfile));
-    } catch (e) {}
-  }, [userProfile]);
+    return null;
+  };
 
   // ==========================================
   // USER-SPECIFIC FAVORITES STORAGE HELPERS
@@ -153,61 +158,71 @@ export const AppProvider = ({ children }) => {
     }
   };
 
-  // Login simulation
-  const login = (userData = {}) => {
-    setIsAuthenticated(true);
-    const targetPhone = userData.phone || userProfile.phone || '+998 (90) 123-45-67';
+  // ==========================================
+  // USER-SPECIFIC BOOKINGS STORAGE HELPERS
+  // ==========================================
+  const getUserBookingsKey = (phone) => {
+    if (!phone) return 'bookings_guest';
+    const cleanPhone = String(phone).replace(/[^0-9+]/g, '');
+    return `bookings_${cleanPhone}`;
+  };
 
-    setUserProfile(prev => {
-      const updated = {
-        ...prev,
-        name: userData.name || prev.name || 'Abdulloh',
-        surname: userData.surname !== undefined ? userData.surname : prev.surname || 'Abdukarimov',
-        phone: targetPhone,
-        city: userData.city || prev.city,
-        email: userData.name ? `${userData.name.toLowerCase().replace(/\s+/g, '.')}@chillzone.uz` : prev.email
-      };
+  const loadUserBookingsFromStorage = (phone) => {
+    if (!phone) return [];
+    const primaryKey = getUserBookingsKey(phone);
+    const directKey = `bookings_${phone}`;
+    const saved = localStorage.getItem(primaryKey) || localStorage.getItem(directKey);
+    if (saved) {
       try {
-        localStorage.setItem('chillzone_user_profile', JSON.stringify(updated));
-      } catch (e) {}
-      return updated;
-    });
-
-    // 3. DATA LOADING ON LOGIN:
-    // Immediately fetch THEIR specific favorites from localStorage using their unique key
-    const userFavorites = loadUserFavoritesFromStorage(targetPhone);
-    setFavorites(userFavorites);
-
-    navigate('home');
-    addToast(
-      language === 'uz'
-        ? `Xush kelibsiz! Chill Zone platformasiga muvaffaqiyatli kirdingiz.`
-        : `Добро пожаловать! Вы успешно вошли на платформу Chill Zone.`,
-      'success'
-    );
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) return parsed;
+      } catch (e) {
+        console.error('Error loading user bookings from storage:', e);
+      }
+    }
+    // If default demo user (Abdulloh Abdukarimov) has no saved bookings yet, initialize with demo mock bookings
+    const cleanPhone = String(phone).replace(/[^0-9+]/g, '');
+    if (cleanPhone.includes('901234567')) {
+      saveUserBookingsToStorage(phone, INITIAL_USER_BOOKINGS);
+      return INITIAL_USER_BOOKINGS;
+    }
+    return [];
   };
 
-  const logout = () => {
-    setIsAuthenticated(false);
-    localStorage.removeItem('chillzone_auth');
-    localStorage.removeItem('joyband_auth');
-
-    // 2. STATE CLEARING ON LOGOUT:
-    // Explicitly clear the active favorites state in React so no ghost data remains
-    setFavorites([]);
-
-    addToast(
-      language === 'uz' ? 'Tizimdan muvaffaqiyatli chiqdingiz' : 'Вы успешно вышли из системы',
-      'info'
-    );
+  const saveUserBookingsToStorage = (phone, bookingList) => {
+    if (!phone) return;
+    const primaryKey = getUserBookingsKey(phone);
+    const directKey = `bookings_${phone}`;
+    try {
+      const data = JSON.stringify(bookingList);
+      localStorage.setItem(primaryKey, data);
+      localStorage.setItem(directKey, data);
+    } catch (e) {
+      console.error('Error saving user bookings to storage:', e);
+    }
   };
 
-  // 1 & 4. USER-SPECIFIC FAVORITES STATE
+  // Active User Profile State
+  const [userProfile, setUserProfile] = useState(() => {
+    const saved = localStorage.getItem('chillzone_active_session') || 
+                  localStorage.getItem('chillzone_current_user') || 
+                  localStorage.getItem('chillzone_user_profile');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    return null;
+  });
+
+  // User Favorites State (100% user-specific)
   const [favorites, setFavorites] = useState(() => {
-    const savedProfile = localStorage.getItem('chillzone_user_profile') || localStorage.getItem('joyband_user_profile');
-    if (savedProfile) {
+    const saved = localStorage.getItem('chillzone_current_user') || localStorage.getItem('chillzone_active_session');
+    if (saved) {
       try {
-        const parsed = JSON.parse(savedProfile);
+        const parsed = JSON.parse(saved);
         if (parsed?.phone) {
           return loadUserFavoritesFromStorage(parsed.phone);
         }
@@ -215,6 +230,108 @@ export const AppProvider = ({ children }) => {
     }
     return [];
   });
+
+  // User Bookings State (100% user-specific)
+  const [userBookings, setUserBookings] = useState(() => {
+    const saved = localStorage.getItem('chillzone_current_user') || localStorage.getItem('chillzone_active_session');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed?.phone) {
+          return loadUserBookingsFromStorage(parsed.phone);
+        }
+      } catch (e) {}
+    }
+    return [];
+  });
+
+  // Login simulation
+  const login = (userData = {}) => {
+    setIsAuthenticated(true);
+    const targetPhone = userData.phone || '+998 (90) 123-45-67';
+    const cleanPhone = String(targetPhone).replace(/[^0-9+]/g, '');
+
+    // Check if an account was previously registered with this phone
+    const existing = getUserAccount(targetPhone);
+
+    let finalName = userData.name;
+    let finalSurname = userData.surname;
+    let finalCity = userData.city;
+
+    if (!finalName) {
+      if (existing?.name) {
+        finalName = existing.name;
+        finalSurname = existing.surname || '';
+        finalCity = existing.city || 'Toshkent';
+      } else if (cleanPhone.includes('901234567')) {
+        finalName = 'Abdulloh';
+        finalSurname = 'Abdukarimov';
+        finalCity = 'Toshkent';
+      } else {
+        finalName = `Mijoz (${cleanPhone.slice(-4) || '7821'})`;
+        finalSurname = '';
+        finalCity = 'Toshkent';
+      }
+    }
+
+    const newUser = {
+      name: finalName,
+      surname: finalSurname !== undefined ? finalSurname : (existing?.surname || ''),
+      phone: targetPhone,
+      city: finalCity || existing?.city || 'Toshkent',
+      email: `${finalName.toLowerCase().replace(/[^\w]/g, '.')}@chillzone.uz`
+    };
+
+    // Save to user registry
+    saveUserAccount(newUser);
+
+    // Save active session
+    try {
+      localStorage.setItem('chillzone_active_session', JSON.stringify(newUser));
+      localStorage.setItem('chillzone_current_user', JSON.stringify(newUser));
+      localStorage.setItem('chillzone_user_profile', JSON.stringify(newUser));
+    } catch (e) {}
+
+    // 1. Update user profile / currentUser state immediately
+    setUserProfile(newUser);
+
+    // 2. Fetch and load user-specific favorites
+    const userFavorites = loadUserFavoritesFromStorage(targetPhone);
+    setFavorites(userFavorites);
+
+    // 3. Fetch and load user-specific bookings
+    const userSpecificBookings = loadUserBookingsFromStorage(targetPhone);
+    setUserBookings(userSpecificBookings);
+
+    navigate('home');
+    addToast(
+      language === 'uz'
+        ? `Xush kelibsiz, ${finalName}! Chill Zone platformasiga kirdingiz.`
+        : `Добро пожаловать, ${finalName}! Вы вошли в Chill Zone.`,
+      'success'
+    );
+  };
+
+  const logout = () => {
+    setIsAuthenticated(false);
+
+    // 2. COMPLETE STATE CLEARING ON LOGOUT:
+    setUserProfile(null);
+    setFavorites([]);
+    setUserBookings([]);
+
+    // Remove activeSession and currentUser from localStorage
+    localStorage.removeItem('chillzone_active_session');
+    localStorage.removeItem('chillzone_current_user');
+    localStorage.removeItem('chillzone_user_profile');
+    localStorage.removeItem('chillzone_auth');
+    localStorage.removeItem('joyband_auth');
+
+    addToast(
+      language === 'uz' ? 'Tizimdan muvaffaqiyatli chiqdingiz' : 'Вы успешно вышли из системы',
+      'info'
+    );
+  };
 
   const toggleFavorite = (activityId) => {
     const activePhone = userProfile?.phone;
@@ -253,11 +370,15 @@ export const AppProvider = ({ children }) => {
     });
   };
 
-  // User bookings
-  const [userBookings, setUserBookings] = useState(INITIAL_USER_BOOKINGS);
-
   const addBooking = (newBooking) => {
-    setUserBookings(prev => [newBooking, ...prev]);
+    const activePhone = userProfile?.phone;
+    setUserBookings((prev) => {
+      const updated = [newBooking, ...prev];
+      if (activePhone) {
+        saveUserBookingsToStorage(activePhone, updated);
+      }
+      return updated;
+    });
     addToast(
       language === 'uz'
         ? 'Bron muvaffaqiyatli amalga oshirildi! Chiptangiz profilingizda saqlandi.'
@@ -267,9 +388,16 @@ export const AppProvider = ({ children }) => {
   };
 
   const cancelBooking = (bookingId) => {
-    setUserBookings(prev => 
-      prev.map(b => b.id === bookingId ? { ...b, status: 'Cancelled', statusText: language === 'uz' ? 'Bekor qilingan' : 'Отменено' } : b)
-    );
+    const activePhone = userProfile?.phone;
+    setUserBookings((prev) => {
+      const updated = prev.map(b => 
+        b.id === bookingId ? { ...b, status: 'Cancelled', statusText: language === 'uz' ? 'Bekor qilingan' : 'Отменено' } : b
+      );
+      if (activePhone) {
+        saveUserBookingsToStorage(activePhone, updated);
+      }
+      return updated;
+    });
     addToast(
       language === 'uz'
         ? `Band qilish (#${bookingId}) bekor qilindi`

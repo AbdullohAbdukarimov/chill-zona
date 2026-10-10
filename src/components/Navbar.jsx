@@ -22,6 +22,7 @@ export const Navbar = () => {
     currentPage, 
     navigate, 
     favorites, 
+    currentUser,
     userProfile, 
     theme, 
     toggleTheme, 
@@ -30,6 +31,9 @@ export const Navbar = () => {
     t, 
     logout 
   } = useApp();
+
+  // Active user dynamically resolved from auth context
+  const activeUser = currentUser || userProfile;
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
@@ -183,11 +187,11 @@ export const Navbar = () => {
             className="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-full border border-stone-200 dark:border-slate-700 hover:border-orange-300 dark:hover:border-orange-500 cursor-pointer transition-all bg-white dark:bg-slate-800 shadow-xs"
           >
             <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-orange-500 to-amber-400 text-white flex items-center justify-center font-bold text-xs shadow-inner">
-              {userProfile?.name?.[0] || 'A'}
+              {activeUser?.name?.[0] || 'U'}
             </div>
             <div className="text-left">
               <span className="text-xs font-bold text-stone-800 dark:text-white block leading-tight whitespace-nowrap">
-                {userProfile?.name || 'Abdulloh'}
+                {activeUser?.name || 'Mijoz'}
               </span>
             </div>
           </div>
