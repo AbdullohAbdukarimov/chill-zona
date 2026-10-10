@@ -88,26 +88,49 @@ export const AppProvider = ({ children }) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // User profile
-  const [userProfile, setUserProfile] = useState({
-    name: 'Azizbek',
-    surname: 'Rahimov',
-    phone: '+998 (90) 123-45-67',
-    email: 'azizbek.rahimov@joyband.uz',
-    city: 'Toshkent'
+  // User profile (defaults to Abdulloh Abdukarimov and persists in localStorage)
+  const [userProfile, setUserProfile] = useState(() => {
+    const saved = localStorage.getItem('joyband_user_profile');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    return {
+      name: 'Abdulloh',
+      surname: 'Abdukarimov',
+      phone: '+998 (90) 123-45-67',
+      email: 'abdulloh.abdukarimov@joyband.uz',
+      city: 'Toshkent'
+    };
   });
+
+  // Keep localStorage in sync with userProfile updates
+  useEffect(() => {
+    try {
+      localStorage.setItem('joyband_user_profile', JSON.stringify(userProfile));
+    } catch (e) {}
+  }, [userProfile]);
 
   // Login simulation
   const login = (userData = {}) => {
     setIsAuthenticated(true);
-    if (userData.phone) {
-      setUserProfile(prev => ({
+    setUserProfile(prev => {
+      const updated = {
         ...prev,
-        phone: userData.phone,
-        name: userData.name || prev.name,
-        surname: userData.surname || prev.surname
-      }));
-    }
+        name: userData.name || prev.name || 'Abdulloh',
+        surname: userData.surname !== undefined ? userData.surname : prev.surname || 'Abdukarimov',
+        phone: userData.phone || prev.phone,
+        city: userData.city || prev.city,
+        email: userData.name ? `${userData.name.toLowerCase().replace(/\s+/g, '.')}@joyband.uz` : prev.email
+      };
+      try {
+        localStorage.setItem('joyband_user_profile', JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
     navigate('home');
     addToast(
       language === 'uz'

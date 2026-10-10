@@ -80,7 +80,7 @@ export const UserDashboardPage = () => {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-orange-500 to-amber-400 text-white flex items-center justify-center font-black text-2xl shadow-lg shadow-orange-500/20">
-                {userProfile.name[0]}{userProfile.surname[0]}
+                {(userProfile.name?.[0] || 'A')}{(userProfile.surname?.[0] || '')}
               </div>
               <div>
                 <h1 className="text-2xl sm:text-3xl font-black text-stone-900 dark:text-white tracking-tight">

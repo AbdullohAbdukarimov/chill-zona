@@ -42,20 +42,33 @@ export const AuthPage = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Realistic authentication delay (600ms)
     setTimeout(() => {
-      const nameParts = fullName.trim() ? fullName.trim().split(' ') : ['Azizbek', 'Rahimov'];
-      const first = nameParts[0] || 'Azizbek';
-      const last = nameParts[1] || 'Rahimov';
+      let first = 'Abdulloh';
+      let last = 'Abdukarimov';
+
+      if (fullName.trim()) {
+        const nameParts = fullName.trim().split(/\s+/);
+        first = nameParts[0] || 'Abdulloh';
+        last = nameParts.slice(1).join(' ') || '';
+      } else {
+        const saved = localStorage.getItem('joyband_user_profile');
+        if (saved) {
+          try {
+            const parsed = JSON.parse(saved);
+            if (parsed.name) first = parsed.name;
+            if (parsed.surname !== undefined) last = parsed.surname;
+          } catch (err) {}
+        }
+      }
 
       login({
-        phone: phoneNumber.trim() || '+998 90 123 45 67',
+        phone: phoneNumber.trim() || '+998 (90) 123-45-67',
         name: first,
         surname: last,
         city: city
       });
       setIsLoading(false);
-    }, 600);
+    }, 400);
   };
 
   return (

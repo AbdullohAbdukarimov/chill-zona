@@ -15,15 +15,17 @@ import {
 } from 'lucide-react';
 
 export const BookingModal = ({ activityId, initialDate, initialTime, initialGuests }) => {
-  const { modalState, closeBookingModal, addBooking, openTicketModal, navigate } = useApp();
+  const { modalState, closeBookingModal, addBooking, openTicketModal, navigate, userProfile } = useApp();
   const activity = MOCK_ACTIVITIES.find(a => a.id === activityId) || MOCK_ACTIVITIES[0];
 
   const [date, setDate] = useState(initialDate || '2026-10-18');
   const [time, setTime] = useState(initialTime || activity.timeSlots[0]);
   const [guests, setGuests] = useState(initialGuests || 2);
   const [paymentMethod, setPaymentMethod] = useState('Payme');
-  const [customerPhone, setCustomerPhone] = useState('+998 90 123 45 67');
-  const [customerName, setCustomerName] = useState('Azizbek Rahimov');
+  const [customerPhone, setCustomerPhone] = useState(userProfile?.phone || '+998 (90) 123-45-67');
+  const [customerName, setCustomerName] = useState(
+    userProfile?.name ? `${userProfile.name} ${userProfile.surname || ''}`.trim() : 'Abdulloh Abdukarimov'
+  );
   const [isSuccess, setIsSuccess] = useState(false);
   const [createdBooking, setCreatedBooking] = useState(null);
 
